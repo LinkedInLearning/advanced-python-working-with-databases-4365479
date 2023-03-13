@@ -10,7 +10,15 @@ def connect(db_name):
 		print(e)
 
 def add_project(cursor, project_title, project_description, tasks):
-	pass
+	project_data = (project_title, project_description)
+	cursor.execute('''INSERT INTO projects(title, description) 
+		VALUES (%s, %s)''', project_data)
+	tasks_data = []
+	for task in tasks:
+		task_data = (cursor.lastrowid, task)
+		tasks_data.append(task_data)
+	cursor.executemany('''INSERT INTO tasks(project_id, description) 
+		VALUES(%s, %s)''', tasks_data)
 
 if __name__ == '__main__':
 	db = connect("projects")
