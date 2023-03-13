@@ -18,3 +18,30 @@ class Project(Base):
 	def __repr__(self):
 		return "<Project(title='{0}, description='{1}')>".format(
 			self.title, self.description)
+
+class Task(Base):
+	__tablename__ = 'tasks'
+	task_id = Column(Integer, primary_key=True)
+	project_id = Column(Integer, ForeignKey('projects.project_id'))
+	description = Column(String(length=50))
+
+	project = relationship("Project")
+
+	def __repr__(self):
+		return "<Task(description='{0}')>".format(self.description)
+
+Base.metadata.create_all(engine)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
