@@ -14,5 +14,7 @@ sales = [ (1100935, "Spencer Educators", "DK204","BYOD-300", 2, 89, 0, 178),
 (1100971, "Hettinger and Sons", "DS306", "DA-SA702 Drone", 12, 250, .5, 1500),
 (1100998, "Luz O'Donoghue", "TV809", "Understanding 3D Printing", 1, 42.99, 0, 42.99) ]
 
+cursor.executemany("INSERT INTO sales VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", sales)
+
 conn.commit()
 conn.close()
