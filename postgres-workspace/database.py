@@ -2,7 +2,23 @@ import psycopg2
 
 def insert_sale(cur, order_num, cust_name, prod_number, prod_name, quantity, price, 
 	discount):
-	pass
+	order_total = quantity * price
+	if discount != 0:
+		order_total = order_total * discount
+	sale_data = {
+	'order_num' : order_num,
+	'cust_name' : cust_name,
+	'prod_number' : prod_number,
+	'prod_name' : prod_name,
+	'quantity' : quantity,
+	'price' : price,
+	'discount' : discount,
+	'order_total' : order_total
+	}
+
+	cur.execute('''INSERT INTO sales VALUES (%(order_num)s, 
+		%(cust_name)s, %(prod_number)s, %(prod_name)s, %(quantity)s, 
+		%(price)s, %(discount)s, %(order_total)s)''', sale_data)
 
 if __name__ == "__main__":
    conn = psycopg2.connect(database="red30",
@@ -23,3 +39,9 @@ if __name__ == "__main__":
    insert_sale(cursor, order_num, cust_name, prod_number, prod_name, quantity, price, discount)
    conn.commit()
    conn.close()
+
+
+
+
+
+   
