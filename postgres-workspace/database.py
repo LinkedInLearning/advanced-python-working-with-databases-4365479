@@ -1,8 +1,7 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, select
 from sqlalchemy import Table, Column, Integer, Float, String, MetaData
 
-engine = create_engine('postgresql+psycopg2://postgres:password@localhost/red30', 
-	echo=True)
+engine = create_engine('postgresql+psycopg2://postgres:password@localhost/red30')
 metadata = MetaData()
 
 # sales_table = Table('sales', 
@@ -20,7 +19,6 @@ sales_table = Table('sales', metadata, autoload_with=engine)
 
 metadata.create_all(engine)
 
-
 with engine.connect() as conn:
 
 	# Read 
@@ -36,23 +34,24 @@ with engine.connect() as conn:
 		price=19.5, 
 		discount=0, 
 		order_total=58.5)
+	conn.execute(insert_statement)
 
-		# Update
-		update_statement = sales_table.update().where(sales_table.c.order_num==1105910).values(quantity=2, order_total=39)
-		conn.execute(update_statement)
+	# Update
+	update_statement = sales_table.update().where(sales_table.c.order_num==1105910).values(quantity=2, order_total=39)
+	conn.execute(update_statement)
 
-		# Confirm Update
-		reselect_statement = sales_table.select().where(sales_table.c.order_num==1105910)
-		updated_sale = conn.execute(reselect_statement).first()
-		print(updated_sale)
+	# Confirm Update
+	reselect_statement = sales_table.select().where(sales_table.c.order_num==1105910)
+	updated_sale = conn.execute(reselect_statement).first()
+	print(updated_sale)
 
-		# Delete
-		delete_statement = sales_table.delete().where(sales_table.c.order_num==1105910)
-		conn.execute(delete_statement)
+	# Delete
+	delete_statement = sales_table.delete().where(sales_table.c.order_num==1105910)
+	conn.execute(delete_statement)
 
-		# Confirm Delete
-		not_found_set = conn.execute(reselect_statement)
-		print(not_found_set.rowcount)
+	# Confirm Delete
+	not_found_set = conn.execute(reselect_statement)
+	print(not_found_set.rowcount)
 
 
 
