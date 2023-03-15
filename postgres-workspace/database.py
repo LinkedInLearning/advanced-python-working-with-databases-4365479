@@ -2,7 +2,7 @@ from sqlalchemy import create_engine, select
 from sqlalchemy import Column, Integer, String, Text, DateTime, Float, Boolean, ForeignKey
 from sqlalchemy.orm import registry, Session, relationship
 
-engine = create_engine('postgresql://postgres:password@localhost/library', future=True)
+engine = create_engine('postgresql://postgres:password@localhost/library')
 
 mapper_registry = registry()
 
