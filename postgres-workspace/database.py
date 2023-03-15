@@ -52,14 +52,15 @@ def add_book(title, number_of_pages, first_name, last_name):
 	with Session(engine) as session:
 		existing_book = session.execute(select(Book).filter(Book.title==title, Book.number_of_pages==number_of_pages)).scalar()
 		if existing_book is not None:
-			print("Book has already been added. No need to re-add.")
+			print("Book exists! Not adding book")
 			return
 
+		print("Book does not exist. Adding book")
 		session.add(book)
 		existing_author = session.execute(select(Author).filter(Author.first_name==first_name, Author.last_name==last_name)).scalar()
 
 		if existing_author is not None:
-			print("Author exists! Adding book")
+			print("Author exists! Not adding author")
 			session.flush()
 			pairing=BookAuthor(author_id=existing_author.author_id, book_id=book.book_id)
 		else:
@@ -70,10 +71,7 @@ def add_book(title, number_of_pages, first_name, last_name):
 
 		session.add(pairing)
 		session.commit()
-		print("New book added!")
-		print(author)
-		print(book)
-		print(pairing)
+		print("New pairing added!" + str(pairing))
 
 if __name__ == "__main__":
 	print("Input new book:\n")
