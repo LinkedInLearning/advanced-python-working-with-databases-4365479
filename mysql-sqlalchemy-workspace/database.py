@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, Numeric, create_engine
+from sqlalchemy import Column, String, Integer, Numeric, create_engine, select, func
 from sqlalchemy.orm import registry, Session
 
 engine = create_engine(
@@ -26,20 +26,39 @@ class Sale(Base):
 Base.metadata.create_all(engine)
 
 with Session(engine, future=True) as session:
-	sale_1 = Sale(order_num=1100935, cust_name="Spencer Educators", prod_number="DK204",
-		prod_name="BYOD-300", quantity=2, price=89, discount=0, order_total=178)
-	sale_2 = Sale(order_num=1100948, cust_name="Ewan Ladd", prod_number="TV810",
-		prod_name="Understanding Automation", quantity=1, price=44.95, discount=0, order_total=44.95)
-	sale_3 = Sale(order_num=1100963, cust_name="Stehr Group", prod_number="DS301",
-		prod_name="DA-SA702 Drone", quantity=3, price=399, discount=.1, order_total=1077.3)
-	sale_4 = Sale(order_num=1100971, cust_name="Hettinger and Sons", prod_number="DS306",
-		prod_name="DA-SA702 Drone", quantity=12, price=250, discount=.5, order_total=1500)
-	sale_5 = Sale(order_num=1100998, cust_name="Luz O'Donoghue", prod_number="TV809",
-		prod_name="Understanding 3D Printing", quantity=1, price=42.99, discount=0, order_total=42.99)
+	# sale_1 = Sale(order_num=1100935, cust_name="Spencer Educators", prod_number="DK204",
+	# 	prod_name="BYOD-300", quantity=2, price=89, discount=0, order_total=178)
+	# sale_2 = Sale(order_num=1100948, cust_name="Ewan Ladd", prod_number="TV810",
+	# 	prod_name="Understanding Automation", quantity=1, price=44.95, discount=0, order_total=44.95)
+	# sale_3 = Sale(order_num=1100963, cust_name="Stehr Group", prod_number="DS301",
+	# 	prod_name="DA-SA702 Drone", quantity=3, price=399, discount=.1, order_total=1077.3)
+	# sale_4 = Sale(order_num=1100971, cust_name="Hettinger and Sons", prod_number="DS306",
+	# 	prod_name="DA-SA702 Drone", quantity=12, price=250, discount=.5, order_total=1500)
+	# sale_5 = Sale(order_num=1100998, cust_name="Luz O'Donoghue", prod_number="TV809",
+	# 	prod_name="Understanding 3D Printing", quantity=1, price=42.99, discount=0, order_total=42.99)
 
-	sales = [sale_1, sale_2, sale_3, sale_4, sale_5]
+	# sales = [sale_1, sale_2, sale_3, sale_4, sale_5]
 
-	session.bulk_save_objects(sales)
+	# session.bulk_save_objects(sales)
 
-	session.flush()
-	session.commit()
+	# session.flush()
+	# session.commit()
+
+	max_query = select(func.max(Sale.order_total))
+	max_order = session.execute(max_query).scalar()
+	print(max_order)
+
+	results_query = select(Sale).order_by(Sale.order_total.desc())
+	results_in_order = session.execute(results_query)
+	for order in results_in_order:
+		print(order)
+
+
+
+
+
+
+
+
+
+
