@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, ForeignKey, create_engine
+from sqlalchemy import Column, String, Integer, ForeignKey, create_engine, select
 from sqlalchemy.orm import registry, relationship, Session
 
 engine = create_engine('mysql+mysqlconnector://root:password@localhost:3306/projects',
@@ -32,6 +32,16 @@ class Task(Base):
 
 Base.metadata.create_all(engine)
 
+with Session(engine) as session:
+	smt = select(Project).where(Project.title == 'Organize closet')
+	results = session.execute(smt)
+	organize_closet_project = results.scalar()
+
+	smt = select(Task).where(Task.project_id == organize_closet_project.project_id)
+	results = session.execute(smt)
+	for task in results:
+		print(task)
+		
 
 
 
