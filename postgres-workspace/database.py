@@ -49,7 +49,7 @@ def add_book(title, number_of_pages, first_name, last_name):
 	author = Author(first_name=first_name, last_name=last_name)
 	book = Book(title=title, number_of_pages=number_of_pages)
 
-	with Session(engine, future=True) as session:
+	with Session(engine) as session:
 		existing_book = session.execute(select(Book).filter(Book.title==title, Book.number_of_pages==number_of_pages)).scalar()
 		if existing_book is not None:
 			print("Book has already been added. No need to re-add.")
@@ -83,6 +83,6 @@ if __name__ == "__main__":
 	last_name = input("What is the last name of the author?\n")
 	print("Inputting book data:\n")
 
-	#add_book(title, number_of_pages, first_name, last_name)
+	add_book(title, number_of_pages, first_name, last_name)
 
 	print("Done!")
